@@ -1,0 +1,64 @@
+CAPI=2:
+
+name: AFRL:bus:axi_lite_write_channel_decoder:1.0.0
+description: AXI Lite write channel decoder block, currently will only keep slave (input from master) side in high state when disconnected.
+
+filesets:
+  src:
+    files:
+      - src/axi_lite_write_channel_decoder.v
+    file_type: verilogSource
+
+  tb_cocotb:
+    files:
+      - tb/tb_cocotb.py : {file_type : user, copyto : .}
+      - tb/tb_cocotb.v : { file_type: verilogSource }
+    
+  dep:
+    depend:
+      - AFRL:utility:helper:1.0.0
+      - AFRL:simple:holdbuffer:1.0.0
+      - AFRL:bus:bus_addr_decoder:1.0.0
+    
+targets:
+  default: &default
+    description: Default for IP intergration.
+    filesets: [src, dep]
+
+  lint:
+    description: Lint with Verible
+    filesets: [src]
+    toplevel: axi_lite_otm
+    default_tool: veriblelint
+    tools:
+      veriblelint:
+        rules:
+         - "-explicit-parameter-storage-type,-parameter-name-style,-line-length,-no-trailing-spaces"
+
+  sim_cocotb:
+    <<: *default
+    description: Cocotb unit tests
+    flow: sim
+    flow_options:
+      tool: icarus
+      cocotb_module: tb_cocotb
+      timescale: 1ns/1ns
+      vcs_options: [-timescale=1ns/1ns]
+    filesets_append: [tb_cocotb]
+    toplevel: tb_cocotb
+    parameters:
+      - ADDRESS_WIDTH
+      - BUS_WIDTH
+
+parameters:
+  ADDRESS_WIDTH:
+    datatype    : int
+    default     : 32
+    description : number of bits for address bus
+    paramtype   : vlogparam
+
+  BUS_WIDTH:
+    datatype    : int
+    default     : 4
+    description : number of bytes for data bus
+    paramtype   : vlogparam

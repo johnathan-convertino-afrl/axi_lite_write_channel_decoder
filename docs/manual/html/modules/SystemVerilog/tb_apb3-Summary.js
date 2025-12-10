@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("SystemVerilogModule:tb_apb3","tb_apb3");NDSummary.OnSummaryLoaded("SystemVerilogModule:tb_apb3",[["SystemVerilog","SystemVerilog"]],[["Modules","Module"]],[[55,0,0,"tb_apb3"]]);

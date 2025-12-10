@@ -1,0 +1,24 @@
+\documentclass[usletter]{article}
+\usepackage{DejaVuSans}
+\renewcommand*\familydefault{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\lstset{
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+\usepackage{pdfpages}
+\usepackage[hidelinks]{hyperref}
+\begin{document}
+
+  \include{src/common.tex}
+
+  %module documentation section
+
+  \includepdf[pages=-, addtotoc={1,subsection,1,up\_apb3,p1}, pagecommand={}]{files_up_apb3-v.pdf}
+  \includepdf[pages=-, addtotoc={1,subsection,1,tb\_apb3-v,p1}, pagecommand={}]{files2_tb_apb3-v.pdf}
+  \includepdf[pages=-, addtotoc={1,subsection,1,tb\_cocotb-py,p1}, pagecommand={}]{files2_tb_cocotb-py.pdf}
+  \includepdf[pages=-, addtotoc={1,subsection,1,tb\_cocotb-v,p1}, pagecommand={}]{files2_tb_cocotb-v.pdf}
+
+\end{document}
