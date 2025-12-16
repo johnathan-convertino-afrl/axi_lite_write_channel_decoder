@@ -1,5 +1,5 @@
-# APB3 SLAVE
-### APB3 slave to Analog Devices uP interface
+# AXI Lite Write Channel Decoder
+### When an address match is detected connect data path porition of channel and pass address in full.
 ---
 
 ![image](docs/manual/img/AFRL.png)
@@ -8,9 +8,9 @@
 
   author: Jay Convertino   
   
-  date: 2024.03.19
+  date: 2025.12.16
   
-  details: Interface analog devices uP interface devices to APB3 bus
+  details: When an address match is detected connect data path porition of channel and pass address in full.
   
   license: MIT   
    
@@ -31,13 +31,17 @@
 ### DOCUMENTATION
   For detailed usage information, please navigate to one of the following sources. They are the same, just in a different format.
 
-  - [up_apb3.pdf](docs/manual/up_apb3.pdf)
-  - [github page](https://johnathan-convertino-afrl.github.io/up_apb3/)
+  - [axi_lite_write_channel_decoder.pdf](docs/manual/axi_lite_write_channel_decoder.pdf)
+  - [github page](https://johnathan-convertino-afrl.github.io/axi_lite_write_channel_decoder/)
 
 ### PARAMETERS
 
-* ADDRESS_WIDTH : Bit width of the address bus.
-* BUS_WIDTH     : Bus width in number of bytes.
+ *   ADDRESS_WIDTH    : Width of the AXI LITE address port in bits.
+ *   BUS_WIDTH        : Width of the AXI LITE bus data port in bytes.
+ *   DATA_BUFFER      : Buffer data channel, 0 to disable.
+ *   TIMEOUT_BEATS    : Number of clock cycles (beats) to count till timeout. 0 disables timeout.
+ *   SLAVE_ADDRESS    : Array of Addresses for each slave (0 = slave 0 and so on).
+ *   SLAVE_REGION     : Region for the address that is valid for the SLAVE ADDRESS.
 
 ### COMPONENTS
 #### SRC

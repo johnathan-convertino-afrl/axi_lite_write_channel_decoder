@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("SystemVerilogModule:axi_lite_write_channel_decoder","axi_lite_write_channel_decoder");NDSummary.OnSummaryLoaded("SystemVerilogModule:axi_lite_write_channel_decoder",[["SystemVerilog","SystemVerilog"]],[["Modules","Module"]],[[28,0,0,"axi_lite_write_channel_decoder"]]);

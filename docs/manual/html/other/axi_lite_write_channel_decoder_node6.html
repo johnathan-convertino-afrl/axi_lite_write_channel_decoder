@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2024 (Released January 1, 2024) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>In a Project</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2024">
+
+<LINK REL="STYLESHEET" HREF="html.css">
+
+<LINK REL="previous" HREF="axi_lite_write_channel_decoder_node4.html">
+<LINK REL="next" HREF="axi_lite_write_channel_decoder_node7.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="axi_lite_write_channel_decoder_node7.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="axi_lite_write_channel_decoder_node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="axi_lite_write_channel_decoder_node5.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html55"
+  HREF="axi_lite_write_channel_decoder_node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="axi_lite_write_channel_decoder_node7.html">Architecture</A>
+<B> Up:</B> <A
+ HREF="axi_lite_write_channel_decoder_node2.html">Usage</A>
+<B> Previous:</B> <A
+ HREF="axi_lite_write_channel_decoder_node5.html">fusesoc_info Depenecies</A>
+ &nbsp; <B>  <A ID="tex2html56"
+  HREF="axi_lite_write_channel_decoder_node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION00023000000000000000">
+In a Project</A>
+</H2>
+
+<P>
+Simply connect inline with the write address channel of the axi lite bus. Set the address to a valid value and the region to a power of two (makes the most sense anyways).
+and the decoder will only allow valid traffic to be passed.
+
+<P>
+<TABLE FRAME="VOID" CELLPADDING="4"><TR><TD>
+<PRE>
+  axi_lite_write_channel_decoder #(
+    .ADDRESS_WIDTH(ADDRESS_WIDTH),
+    .BUS_WIDTH(BUS_WIDTH),
+    .SLAVE_ADDRESS(SLAVE_ADDRESS),
+    .SLAVE_REGION(SLAVE_REGION)
+  ) dut (
+    .connected(connected),
+    .aclk(aclk),
+    .arstn(arstn),
+    .s_axi_awaddr(s_axi_awaddr),
+    .s_axi_awprot(s_axi_awprot),
+    .s_axi_awvalid(s_axi_awvalid),
+    .s_axi_awready(s_axi_awready),
+    .s_axi_wdata(s_axi_wdata),
+    .s_axi_wstrb(s_axi_wstrb),
+    .s_axi_wvalid(s_axi_wvalid),
+    .s_axi_wready(s_axi_wready),
+    .s_axi_bresp(s_axi_bresp),
+    .s_axi_bvalid(s_axi_bvalid),
+    .s_axi_bready(s_axi_bready),
+    .m_axi_awaddr(w_m_axi_awaddr),
+    .m_axi_awprot(m_axi_awprot),
+    .m_axi_awvalid(m_axi_awvalid),
+    .m_axi_awready(m_axi_awready),
+    .m_axi_wdata(m_axi_wdata),
+    .m_axi_wstrb(m_axi_wstrb),
+    .m_axi_wvalid(m_axi_wvalid),
+    .m_axi_wready(m_axi_wready),
+    .m_axi_bresp(m_axi_bresp),
+    .m_axi_bvalid(m_axi_bvalid),
+    .m_axi_bready(m_axi_bready)
+  );
+</PRE>
+</TD></TR></TABLE>
+
+<P>
+<BR><HR>
+
+</BODY>
+</HTML>

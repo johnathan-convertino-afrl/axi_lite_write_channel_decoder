@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("v",["File"],[["v",,[[,"tb_apb3.v",,,0,"File2:tb_apb3.v:tb_apb3.v"],[,"tb_coctb.v",,,0,"File2:tb_cocotb.v:tb_coctb.v"],[,"up_apb3.v",,,0,"File:up_apb3.v:up_apb3.v"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("v",["File"],[["v",,[[,"axi_lite_write_channel_decoder.v",,,0,"File:axi_lite_write_channel_decoder.v:axi_lite_write_channel_decoder.v"],[,"tb_coctb.v",,,0,"File2:tb_cocotb.v:tb_coctb.v"]]]]);

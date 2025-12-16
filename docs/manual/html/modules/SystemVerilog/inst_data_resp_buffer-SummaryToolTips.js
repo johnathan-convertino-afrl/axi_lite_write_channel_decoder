@@ -1,0 +1,1 @@
+﻿NDSummary.OnToolTipsLoaded("SystemVerilogModule:inst_data_resp_buffer",{32:"<div class=\"NDToolTip TModule LSystemVerilog\"><div class=\"TTSummary\">If data buffer enabled, this holdbuffer will be generated.</div></div>"});

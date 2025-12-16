@@ -1,0 +1,1 @@
+﻿NDSummary.OnToolTipsLoaded("SystemVerilogModule:inst_addr_buffer",{30:"<div class=\"NDToolTip TModule LSystemVerilog\"><div class=\"TTSummary\">Buffer for the address</div></div>"});

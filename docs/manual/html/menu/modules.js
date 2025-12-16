@@ -1,1 +1,1 @@
-﻿NDMenu.OnSectionLoaded("modules.js",[[1,"dut"],[1,"tb_apb3"],[1,"tb_cocotb"],[1,"up_apb3"]]);
+﻿NDMenu.OnSectionLoaded("modules.js",[[1,"axi_lite_write_channel_decoder"],[1,"bus_addr_decoder"],[1,"dut"],[1,"inst_addr_buffer"],[1,"inst_data_buffer"],[1,"inst_data_resp_buffer"],[1,"tb_cocotb"]]);

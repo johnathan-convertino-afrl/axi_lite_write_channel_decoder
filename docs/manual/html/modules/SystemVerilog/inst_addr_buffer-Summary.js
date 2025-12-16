@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("SystemVerilogModule:inst_addr_buffer","inst_addr_buffer");NDSummary.OnSummaryLoaded("SystemVerilogModule:inst_addr_buffer",[["SystemVerilog","SystemVerilog"]],[["Modules","Module"]],[[30,0,0,"inst_addr_buffer"]]);

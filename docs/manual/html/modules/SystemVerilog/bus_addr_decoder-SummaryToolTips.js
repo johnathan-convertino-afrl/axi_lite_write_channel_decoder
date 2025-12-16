@@ -1,0 +1,1 @@
+﻿NDSummary.OnToolTipsLoaded("SystemVerilogModule:bus_addr_decoder",{31:"<div class=\"NDToolTip TModule LSystemVerilog\"><div class=\"TTSummary\">Decoder for address bus.</div></div>"});

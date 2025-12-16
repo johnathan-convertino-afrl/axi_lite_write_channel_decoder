@@ -36,33 +36,43 @@
 /*
  * Module: tb_cocotb
  *
- * APB3 slave to uP interface DUT
- *
  * Parameters:
  *
- *   ADDRESS_WIDTH   - Width of the APB3 address port in bits.
- *   BUS_WIDTH       - Width of the APB3 bus data port in bytes.
+ *   ADDRESS_WIDTH    - Width of the AXI LITE address port in bits.
+ *   BUS_WIDTH        - Width of the AXI LITE bus data port in bytes.
+ *   DATA_BUFFER      - Buffer data channel, 0 to disable.
+ *   TIMEOUT_BEATS    - Number of clock cycles (beats) to count till timeout. 0 disables timeout.
+ *   SLAVE_ADDRESS    - Array of Addresses for each slave (0 = slave 0 and so on).
+ *   SLAVE_REGION     - Region for the address that is valid for the SLAVE ADDRESS.
  *
  * Ports:
  *
- *   clk              - Clock
- *   rstn             - negative reset
- *   s_apb_paddr      - APB3 address bus, up to 32 bits wide.
- *   s_apb_psel       - APB3 select per slave (1 for this core).
- *   s_apb_penable    - APB3 enable device for multiple transfers after first.
- *   s_apb_pready     - APB3 ready is a output from the slave to indicate its able to process the request.
- *   s_apb_pwrite     - APB3 Direction signal, active high is a write access. Active low is a read access.
- *   s_apb_pwdata     - APB3 write data port.
- *   s_apb_prdata     - APB3 read data port.
- *   s_apb_pslverror  - APB3 error indicates transfer failure, not implimented.
- *   up_rreq          - uP bus read request
- *   up_rack          - uP bus read ack
- *   up_raddr         - uP bus read address
- *   up_rdata         - uP bus read data
- *   up_wreq          - uP bus write request
- *   up_wack          - uP bus write ack
- *   up_waddr         - uP bus write address
- *   up_wdata         - uP bus write data
+ *   connected        - Core has established channel connection
+ *   aclk             - Input clock
+ *   arstn            - Input negative reset
+ *   s_axi_awaddr     - Slave write input channel address
+ *   s_axi_awprot     - Slave write input channel protection mode
+ *   s_axi_awvalid    - Slave write input channel address is valid.
+ *   s_axi_awready    - Slave write input channel is ready.
+ *   s_axi_wdata      - Slave write input channel data
+ *   s_axi_wstrb      - Slave write input channel valid bytes
+ *   s_axi_wvalid     - Slave write input channel data valid
+ *   s_axi_wready     - Slave write input channel is ready.
+ *   s_axi_bresp      - Slave write input channel response to write(s).
+ *   s_axi_bvalid     - Slave write input channel response valid.
+ *   s_axi_bready     - Slave write input channel response ready.
+ *   m_axi_awaddar    - Master write output channel address.
+ *   m_axi_awprot     - Master write output channel protection mode.
+ *   m_axi_awvalid    - Master write output channel address is valid.
+ *   m_axi_awready    - Master write output channel is ready.
+ *   m_axi_wdata      - Master write output channel data.
+ *   m_axi_wstrb      - Master write output channel data bytes valid.
+ *   m_axi_wvalid     - Master write output channel data is valid.
+ *   m_axi_wvalid     - Master write output channel data ready.
+ *   m_axi_bresp      - Master write output channel response.
+ *   m_axi_bvalid     - Master write output channel response valid.
+ *   m_axi_bready     - Master write output channel response ready.
+ *
  */
 module tb_cocotb #(
     parameter integer              ADDRESS_WIDTH = 32,
@@ -74,55 +84,40 @@ module tb_cocotb #(
     output  wire                            connected,
     input   wire                            aclk,
     input   wire                            arstn,
-    //master interface
-    //input master write address
     input   wire [ADDRESS_WIDTH-1:0]        s_axi_awaddr,
     input   wire [2:0]                      s_axi_awprot,
     input   wire                            s_axi_awvalid,
     output  wire                            s_axi_awready,
-    //input master write data
     input   wire [BUS_WIDTH*8-1:0]          s_axi_wdata,
     input   wire [BUS_WIDTH-1:0]            s_axi_wstrb,
     input   wire                            s_axi_wvalid,
     output  wire                            s_axi_wready,
-    //output master write data state
     output  wire [1:0]                      s_axi_bresp,
     output  wire                            s_axi_bvalid,
     input   wire                            s_axi_bready,
-    //slave interfaces
-    //output slave write address
     output  wire [ADDRESS_WIDTH-1:0]        m_axi_awaddr,
     output  wire [2:0]                      m_axi_awprot,
     output  wire                            m_axi_awvalid,
     input   wire                            m_axi_awready,
-    //output slave write data
     output  wire [BUS_WIDTH*8-1:0]          m_axi_wdata,
     output  wire [BUS_WIDTH-1:0]            m_axi_wstrb,
     output  wire                            m_axi_wvalid,
     input   wire                            m_axi_wready,
-    //input slave write data state
     input   wire [1:0]                      m_axi_bresp,
     input   wire                            m_axi_bvalid,
     output  wire                            m_axi_bready,
-    //unused read interface
-    //master interface
-    //input master read address
     input   wire [ADDRESS_WIDTH-1:0]        s_axi_araddr,
     input   wire [2:0]                      s_axi_arprot,
     input   wire                            s_axi_arvalid,
     output  wire                            s_axi_arready,
-    //output master read data
     output  wire [BUS_WIDTH*8-1:0]          s_axi_rdata,
     output  wire [1:0]                      s_axi_rresp,
     output  wire                            s_axi_rvalid,
     input   wire                            s_axi_rready,
-    //slave interfaces
-    //output slave read address
     output  wire [ADDRESS_WIDTH-1:0]        m_axi_araddr,
     output  wire [2:0]                      m_axi_arprot,
     output  wire                            m_axi_arvalid,
     input   wire                            m_axi_arready,
-    //input slave read data
     input   wire [BUS_WIDTH*8-1:0]          m_axi_rdata,
     input   wire [1:0]                      m_axi_rresp,
     input   wire                            m_axi_rvalid,
@@ -155,33 +150,25 @@ module tb_cocotb #(
     .connected(connected),
     .aclk(aclk),
     .arstn(arstn),
-    //master interface
-    //input master write address
     .s_axi_awaddr(s_axi_awaddr),
     .s_axi_awprot(s_axi_awprot),
     .s_axi_awvalid(s_axi_awvalid),
     .s_axi_awready(s_axi_awready),
-    //input master write data
     .s_axi_wdata(s_axi_wdata),
     .s_axi_wstrb(s_axi_wstrb),
     .s_axi_wvalid(s_axi_wvalid),
     .s_axi_wready(s_axi_wready),
-    //output master write data state
     .s_axi_bresp(s_axi_bresp),
     .s_axi_bvalid(s_axi_bvalid),
     .s_axi_bready(s_axi_bready),
-    //slave interfaces
-    //output slave write address
     .m_axi_awaddr(w_m_axi_awaddr),
     .m_axi_awprot(m_axi_awprot),
     .m_axi_awvalid(m_axi_awvalid),
     .m_axi_awready(m_axi_awready),
-    //output slave write data
     .m_axi_wdata(m_axi_wdata),
     .m_axi_wstrb(m_axi_wstrb),
     .m_axi_wvalid(m_axi_wvalid),
     .m_axi_wready(m_axi_wready),
-    //input slave write data state
     .m_axi_bresp(m_axi_bresp),
     .m_axi_bvalid(m_axi_bvalid),
     .m_axi_bready(m_axi_bready)

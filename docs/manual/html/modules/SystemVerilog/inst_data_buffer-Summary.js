@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("SystemVerilogModule:inst_data_buffer","inst_data_buffer");NDSummary.OnSummaryLoaded("SystemVerilogModule:inst_data_buffer",[["SystemVerilog","SystemVerilog"]],[["Modules","Module"]],[[33,0,0,"inst_data_buffer"]]);

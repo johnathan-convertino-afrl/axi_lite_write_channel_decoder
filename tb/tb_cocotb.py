@@ -3,7 +3,7 @@
 #
 # author:  JAY CONVERTINO
 #
-# date:    2025/03/04
+# date:    2025/12/16
 #
 # about:   Brief
 # Cocotb test bench
@@ -98,7 +98,7 @@ async def increment_test_write(dut):
 
 
 # Function: increment_test_random_ready_write_data(dut):
-# Coroutine that is identified as a test routine.
+# Coroutine that is identified as a test routine. Write data at the proper address and randomize the ram write channel ready.
 #
 # Parameters:
 #   dut - Device under test passed from cocotb.
@@ -126,13 +126,13 @@ async def increment_test_random_ready_write_data(dut):
   
     assert data == payload_bytes, "Data written to RAM does not match read data."
     
-# Function: increment_test_random_ready_read_addr
-# Coroutine that is identified as a test routine. Setup to read from gpio
+# Function: increment_test_random_ready_write_addr
+# Coroutine that is identified as a test routine. Random ready the write address channel.
 #
 # Parameters:
 #   dut - Device under test passed from cocotb.
 @cocotb.test()
-async def increment_test_random_ready_read_addr(dut):
+async def increment_test_random_ready_write_addr(dut):
 
   start_clock(dut)
 
@@ -156,7 +156,7 @@ async def increment_test_random_ready_read_addr(dut):
     assert data == payload_bytes, "Data written to RAM does not match read data."
     
 # Function: increment_test_timeout_no_answer
-# Coroutine that is identified as a test routine. Setup to read from gpio
+# Coroutine that is identified as a test routine. Timeout if no answer to write request.
 #
 # Parameters:
 #   dut - Device under test passed from cocotb.
@@ -187,7 +187,7 @@ async def increment_test_timeout_no_answer(dut):
     await RisingEdge(dut.aclk)
     
 # Function: increment_test_random_ready_timeout_no_answer
-# Coroutine that is identified as a test routine. Setup to read from gpio
+# Coroutine that is identified as a test routine. Randomize the ready on timeout tests.
 # 
 # Parameters:
 #   dut - Device under test passed from cocotb.
@@ -234,7 +234,7 @@ async def in_reset(dut):
 
     await Timer(100, units="ns")
 
-    assert str(dut.s_axi_awready.value) == str(Logic("z")).lower(), "s_axi_awready is not z!"
+    assert dut.s_axi_awready.value == 0, "s_axi_awready is not 0!"
 
 # Function: no_clock
 # Coroutine that is identified as a test routine. This routine tests if no ready when clock is lost
@@ -249,4 +249,4 @@ async def no_clock(dut):
 
     await Timer(100, units="ns")
 
-    assert str(dut.s_axi_awready.value) == str(Logic("z")).lower(), "s_axi_awready is not z!"
+    assert dut.s_axi_awready.value == 0, "s_axi_awready is not 0!"

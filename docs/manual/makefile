@@ -1,4 +1,4 @@
-PROJECT_NAME := up_apb3
+PROJECT_NAME := axi_lite_write_channel_decoder
 
 MK_DIR := makefiles
 

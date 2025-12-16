@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("bri",["Information"],[["Brief",,[[,,"Python",,0,"File2:tb_cocotb.py:Brief"],[,,"SystemVerilog",,0,"File:up_apb3.v:Brief"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("bri",["Information"],[["Brief",,[[,,"Python",,0,"File2:tb_cocotb.py:Brief"],[,,"SystemVerilog",,0,"File:axi_lite_write_channel_decoder.v:Brief"]]]]);

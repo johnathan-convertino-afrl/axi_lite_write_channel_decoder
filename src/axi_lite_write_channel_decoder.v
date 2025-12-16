@@ -1,12 +1,13 @@
 //******************************************************************************
-// file:    axi_lite_otm.v
+// file:    axi_lite_write_channel_decoder.v
 //
 // author:  JAY CONVERTINO
 //
-// date:    2025/12/01
+// date:    2025/12/16
 //
 // about:   Brief
-// AXI Lite Single master to multiple slave crossbar.
+// AXI lite write channel decoder. Block address and data paths till a valid 
+// address is presented.
 //
 // license: License MIT
 // Copyright 2025 Jay Convertino
@@ -36,19 +37,47 @@
 `default_nettype none
 
 /*
- * Module: up_apb3
+ * Module: axi_lite_write_channel_decoder
  *
- * APB3 slave to uP interface
+ * AXI lite write channel decoder. Block address and data paths till a valid 
+ * address is presented.
  *
  * Parameters:
  *
  *   ADDRESS_WIDTH    - Width of the AXI LITE address port in bits.
  *   BUS_WIDTH        - Width of the AXI LITE bus data port in bytes.
+ *   DATA_BUFFER      - Buffer data channel, 0 to disable.
+ *   TIMEOUT_BEATS    - Number of clock cycles (beats) to count till timeout. 0 disables timeout.
  *   SLAVE_ADDRESS    - Array of Addresses for each slave (0 = slave 0 and so on).
  *   SLAVE_REGION     - Region for the address that is valid for the SLAVE ADDRESS.
  *
  * Ports:
  *
+ *   connected        - Core has established channel connection
+ *   aclk             - Input clock
+ *   arstn            - Input negative reset
+ *   s_axi_awaddr     - Slave write input channel address
+ *   s_axi_awprot     - Slave write input channel protection mode
+ *   s_axi_awvalid    - Slave write input channel address is valid.
+ *   s_axi_awready    - Slave write input channel is ready.
+ *   s_axi_wdata      - Slave write input channel data
+ *   s_axi_wstrb      - Slave write input channel valid bytes
+ *   s_axi_wvalid     - Slave write input channel data valid
+ *   s_axi_wready     - Slave write input channel is ready.
+ *   s_axi_bresp      - Slave write input channel response to write(s).
+ *   s_axi_bvalid     - Slave write input channel response valid.
+ *   s_axi_bready     - Slave write input channel response ready.
+ *   m_axi_awaddar    - Master write output channel address.
+ *   m_axi_awprot     - Master write output channel protection mode.
+ *   m_axi_awvalid    - Master write output channel address is valid.
+ *   m_axi_awready    - Master write output channel is ready.
+ *   m_axi_wdata      - Master write output channel data.
+ *   m_axi_wstrb      - Master write output channel data bytes valid.
+ *   m_axi_wvalid     - Master write output channel data is valid.
+ *   m_axi_wvalid     - Master write output channel data ready.
+ *   m_axi_bresp      - Master write output channel response.
+ *   m_axi_bvalid     - Master write output channel response valid.
+ *   m_axi_bready     - Master write output channel response ready.
  *
  */
 module axi_lite_write_channel_decoder #(
@@ -63,33 +92,25 @@ module axi_lite_write_channel_decoder #(
     output  wire                            connected,
     input   wire                            aclk,
     input   wire                            arstn,
-    //master interface
-    //input master write address
     input   wire [ADDRESS_WIDTH-1:0]        s_axi_awaddr,
     input   wire [2:0]                      s_axi_awprot,
     input   wire                            s_axi_awvalid,
     output  wire                            s_axi_awready,
-    //input master write data
     input   wire [BUS_WIDTH*8-1:0]          s_axi_wdata,
     input   wire [BUS_WIDTH-1:0]            s_axi_wstrb,
     input   wire                            s_axi_wvalid,
     output  wire                            s_axi_wready,
-    //output master write data state
     output  wire [1:0]                      s_axi_bresp,
     output  wire                            s_axi_bvalid,
     input   wire                            s_axi_bready,
-    //slave interfaces
-    //output slave write address
     output  wire [ADDRESS_WIDTH-1:0]        m_axi_awaddr,
     output  wire [2:0]                      m_axi_awprot,
     output  wire                            m_axi_awvalid,
     input   wire                            m_axi_awready,
-    //output slave write data
     output  wire [BUS_WIDTH*8-1:0]          m_axi_wdata,
     output  wire [BUS_WIDTH-1:0]            m_axi_wstrb,
     output  wire                            m_axi_wvalid,
     input   wire                            m_axi_wready,
-    //input slave write data state
     input   wire [1:0]                      m_axi_bresp,
     input   wire                            m_axi_bvalid,
     output  wire                            m_axi_bready
@@ -101,7 +122,14 @@ module axi_lite_write_channel_decoder #(
   reg [31:0]                      r_timeout_counter;
   
   assign connected = w_connected;
+  
+  //Group: Instantiated Modules
 
+  /*
+   * Module: inst_addr_buffer
+   *
+   * Buffer for the address
+   */
   holdbuffer #(
     .BUS_WIDTH(ADDRESS_WIDTH+3)
   ) inst_addr_buffer (
@@ -121,6 +149,11 @@ module axi_lite_write_channel_decoder #(
     .m_data_ack(1'b0)
   );
 
+  /*
+   * Module: bus_addr_decoder
+   *
+   * Decoder for address bus.
+   */
   bus_addr_decoder #(
     .ADDRESS_WIDTH(ADDRESS_WIDTH),
     .ADDRESS(SLAVE_ADDRESS),
@@ -136,6 +169,11 @@ module axi_lite_write_channel_decoder #(
   
   generate
     if(DATA_BUFFER == 1) begin : gen_DATA_BUFFER
+      /*
+      * Module: inst_data_resp_buffer
+      *
+      * If data buffer enabled, this holdbuffer will be generated.
+      */
       holdbuffer #(
         .BUS_WIDTH(2)
       ) inst_data_resp_buffer (
@@ -155,6 +193,11 @@ module axi_lite_write_channel_decoder #(
         .m_data_ack(1'b0)
       );
       
+      /*
+      * Module: inst_data_buffer
+      *
+      * If data buffer enabled, this holdbuffer will be generated.
+      */
       holdbuffer #(
         .BUS_WIDTH(BUS_WIDTH*8+BUS_WIDTH)
       ) inst_data_buffer (
@@ -184,6 +227,7 @@ module axi_lite_write_channel_decoder #(
       assign s_axi_wready = m_axi_wready & w_connected;
     end
     
+    // No timeout, keep signals active low (0).
     if(TIMEOUT_BEATS == 0) begin : gen_NO_TIMEOUT
       always @(posedge aclk)
       begin
@@ -201,10 +245,12 @@ module axi_lite_write_channel_decoder #(
           r_timeout_counter <= {32{1'b0}};
           r_timeout <= r_timeout;
 
+          //if the address or data or data response not valid and we are connected, count beats.
           if(!s_axi_awvalid && !m_axi_bvalid && !s_axi_wvalid && w_connected)
           begin
             r_timeout_counter <= r_timeout_counter + 1;
             
+            // once we hit the beats, lets trigger the timeout signal.
             if(r_timeout_counter >= TIMEOUT_BEATS)
             begin
               r_timeout_counter <= r_timeout_counter;
@@ -212,6 +258,7 @@ module axi_lite_write_channel_decoder #(
             end
           end
           
+          //if timeout is set, reset it to 0 and reset counter (this is to keep it to a single clock cycle)
           if(r_timeout)
           begin
             r_timeout_counter <= {32{1'b0}};

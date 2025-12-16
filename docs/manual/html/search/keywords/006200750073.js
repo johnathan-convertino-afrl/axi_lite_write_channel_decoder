@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("bus",["Module"],[["bus_addr_decoder",,[[,,,,0,"File:axi_lite_write_channel_decoder.v:bus_addr_decoder","SystemVerilogModule:bus_addr_decoder"]]]]);
