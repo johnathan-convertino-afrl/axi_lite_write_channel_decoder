@@ -150,7 +150,7 @@ module axi_lite_write_channel_decoder #(
   );
 
   /*
-   * Module: bus_addr_decoder
+   * Module: inst_addr_verify
    *
    * Decoder for address bus.
    */
@@ -168,7 +168,7 @@ module axi_lite_write_channel_decoder #(
   );
   
   generate
-    if(DATA_BUFFER == 1) begin : gen_DATA_BUFFER
+    if(DATA_BUFFER != 0) begin : gen_DATA_BUFFER
       /*
       * Module: inst_data_resp_buffer
       *

@@ -1,1 +1,0 @@
-﻿NDFramePage.OnPageTitleLoaded("SystemVerilogModule:bus_addr_decoder","bus_addr_decoder");NDSummary.OnSummaryLoaded("SystemVerilogModule:bus_addr_decoder",[["SystemVerilog","SystemVerilog"]],[["Modules","Module"]],[[31,0,0,"bus_addr_decoder"]]);
