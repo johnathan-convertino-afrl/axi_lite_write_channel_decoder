@@ -46,11 +46,10 @@
 ### COMPONENTS
 #### SRC
 
-* up_apb3.v
+* axi_lite_write_channel_decoder.v
 
 #### TB
 
-* tb_apb3.v
 * tb_cocotb.py
 * tb_cocotb.v
   
