@@ -138,6 +138,7 @@ module axi_lite_write_channel_decoder #(
     .timeout(r_timeout),
     .enable(w_connected),
     .clear(1'b0),
+    .pause(1'b0),
     .read_last(),
     .s_data({s_axi_awprot, s_axi_awaddr}),
     .s_data_last(1'b0),
@@ -156,7 +157,7 @@ module axi_lite_write_channel_decoder #(
    *
    * Decoder for address bus.
    */
-  bus_addr_decoder #(
+  bus_addr_decoder #(.pause(1'b0),
     .ADDRESS_WIDTH(ADDRESS_WIDTH),
     .ADDRESS(SLAVE_ADDRESS),
     .REGION(SLAVE_REGION)
@@ -184,6 +185,7 @@ module axi_lite_write_channel_decoder #(
         .timeout(r_timeout),
         .enable(w_connected),
         .clear(1'b0),
+        .pause(1'b0),
         .read_last(),
         .s_data(m_axi_bresp),
         .s_data_last(1'b0),
@@ -210,6 +212,7 @@ module axi_lite_write_channel_decoder #(
         .timeout(r_timeout),
         .enable(w_connected),
         .clear(1'b0),
+        .pause(1'b0),
         .read_last(),
         .s_data({s_axi_wstrb, s_axi_wdata}),
         .s_data_last(1'b0),
