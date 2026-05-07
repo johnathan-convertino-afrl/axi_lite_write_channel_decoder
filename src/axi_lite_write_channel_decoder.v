@@ -155,7 +155,7 @@ module axi_lite_write_channel_decoder #(
    *
    * Decoder for address bus.
    */
-  bus_addr_decoder #(.pause(1'b0),
+  bus_addr_decoder #(
     .ADDRESS_WIDTH(ADDRESS_WIDTH),
     .ADDRESS(SLAVE_ADDRESS),
     .REGION(SLAVE_REGION)
