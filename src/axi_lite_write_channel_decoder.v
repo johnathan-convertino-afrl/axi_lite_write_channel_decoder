@@ -131,7 +131,8 @@ module axi_lite_write_channel_decoder #(
    * Buffer for the address
    */
   holdbuffer #(
-    .BUS_WIDTH(ADDRESS_WIDTH+3)
+    .BUS_WIDTH(ADDRESS_WIDTH+3),
+    .REG_ENABLE(1)
   ) inst_addr_buffer (
     .clk(aclk),
     .rstn(arstn),
@@ -176,7 +177,8 @@ module axi_lite_write_channel_decoder #(
       * If data buffer enabled, this holdbuffer will be generated.
       */
       holdbuffer #(
-        .BUS_WIDTH(2)
+        .BUS_WIDTH(2),
+        .REG_ENABLE(1)
       ) inst_data_resp_buffer (
         .clk(aclk),
         .rstn(arstn),
@@ -201,7 +203,8 @@ module axi_lite_write_channel_decoder #(
       * If data buffer enabled, this holdbuffer will be generated.
       */
       holdbuffer #(
-        .BUS_WIDTH(BUS_WIDTH*8+BUS_WIDTH)
+        .BUS_WIDTH(BUS_WIDTH*8+BUS_WIDTH),
+        .REG_ENABLE(1)
       ) inst_data_buffer (
         .clk(aclk),
         .rstn(arstn),
